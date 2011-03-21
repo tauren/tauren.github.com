@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Demo Page for jQuery UI selectmenu minMenuWidth usage</title>
+	
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	
+	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
+
+	<style type="text/css">
+		/* demo styles */
+		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
+		fieldset { border:0; }	
+		label,select,.ui-select-menu { float: left; margin-right: 10px; }
+		select { width: 100%; }
+		.wrap span.ui-selectmenu-item-header,
+		.wrap ul.ui-selectmenu-menu li a { text-decoration: underline !important; }
+		table {
+			border-collapse: collapse;
+			border-spacing:0; 
+			table-layout: fixed;
+			font: normal 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+			background: #fff;
+			width: 800px;
+		}
+		table#width6 {
+			width: 600px;
+		}
+		table#width4 {
+			width: 400px;
+		}
+		table th {
+			font-size: 90%;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			text-align: left;
+			vertical-align: middle;
+		}
+		table tr:hover {
+			background-color: #afe7fd;
+		}
+		table th,
+		table td {
+			padding: .3em;
+			min-width: 3em;
+			vertical-align: middle;
+			border-style: solid;
+			border: 1px solid #c4d9e1;
+		}
+	</style>
+	<script type="text/javascript">	
+		$(function(){			
+
+			var monthNames = ["January","February","March","April","May","June",
+					"July","August","September","October","November","December"];
+
+			var month = $("select.month");
+			for (var i=0; i<12; i++) {
+				var option = $("<option>",{
+					value: i+1,
+					text: monthNames[i]
+				});
+				month.append(option);
+			}
+	
+			var day = $("select.day");
+			for (var i=1; i<32; i++) {
+				var option = $("<option>",{
+					value: i,
+					text: i,
+				});
+				day.append(option);
+			}
+	
+			var current = new Date().getFullYear();
+			var year = $("select.year");
+			for (var i=0; i<100; i++) {
+				var option = $("<option>",{
+					value: current - i,
+					text: current - i,
+					selected: (i==17 ? "selected" : "")
+				});
+				year.append(option);
+			}
+		
+			$('select').each(function() {
+				var $this = $(this);
+				$this.selectmenu({
+					style:'popup',
+					width: $this.hasClass("nosize") ? undefined : $this.width(),
+					minMenuWidth: $this.hasClass("withmin") ? 100 : undefined
+				});
+			});
+		});
+		
+		// add themeswitcher
+		$(function(){ 
+			var ts = $('<div class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: 5px; position: absolute; top: 20px; right: 10px;">Click here to add Themeswitcher!</div>')
+			.appendTo('body')
+			.bind("click", function() {
+				ts.text("Loading Themeswitcher...");
+				$.getScript('http://ui.jquery.com/applications/themeroller/themeswitchertool/', function() {
+					ts.removeClass("ui-button ui-widget ui-state-default ui-corner-all").text("").unbind("click").themeswitcher(); 
+				});
+			}); 
+		});
+	</script>
+</head>
+<body>
+	<br />
+	<br />
+	<form action="#">
+		<h2>Large space for selectmenu</h2>
+		<p>
+			Selects have a width of 100% and are within sized containers. Selectmenu has it's width set
+			to the width of the select. Everything looks good because there is enough space for the menu
+			options to fit.
+		</p>
+		<fieldset>
+			<table>
+				<col width="40%">
+				<col width="20%">
+				<col width="20%">
+				<col width="20%">
+				<tr>
+					<th>Event</th>
+					<th>Month</th>
+					<th>Day</th>
+					<th>Year</th>
+				</tr>
+				<tr>
+					<td>Your birthdate</td>
+					<td>
+						<select name="month" class="month">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your graduation</td>
+					<td>
+						<select name="month" class="month">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your anniversary</td>
+					<td>
+						<select name="month" class="month">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<h2>Smaller space for selectmenu</h2>
+		<p>
+			Selects have a width of 100% and are within sized containers. Selectmenu has it's width set
+			to the width of the select. Day and year look good because options fit in space. <strong>But popup
+			menu for month has options that do not fit, creating a horizontal scrollbar and the end of 
+			the month names to be not visible.</strong>
+		</p>
+		<fieldset>
+			<table id="width6">
+				<col width="40%">
+				<col width="20%">
+				<col width="20%">
+				<col width="20%">
+				<tr>
+					<th>Event</th>
+					<th>Month</th>
+					<th>Day</th>
+					<th>Year</th>
+				</tr>
+				<tr>
+					<td>Your birthdate</td>
+					<td>
+						<select name="month" class="month">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your graduation</td>
+					<td>
+						<select name="month" class="month">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your anniversary</td>
+					<td>
+						<select name="month" class="month">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<h2>FIXED: Smaller space for selectmenu using minMenuWidth</h2>
+		<p>
+			Selects have a width of 100% and are within sized containers. Selectmenus have width set
+			to the width of the select and the month selectmenu has a minimum width set using minMenuWidth. 
+			Day and year look good because options already fit in space and month looks good because
+			minMenuWidth gives it space to show all options. No scrollbars appear on the popup menus
+			and all popup menu text is visible.
+		</p>
+		<fieldset>
+			<table id="width6">
+				<col width="40%">
+				<col width="20%">
+				<col width="20%">
+				<col width="20%">
+				<tr>
+					<th>Event</th>
+					<th>Month</th>
+					<th>Day</th>
+					<th>Year</th>
+				</tr>
+				<tr>
+					<td>Your birthdate</td>
+					<td>
+						<select name="month" class="month withmin">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your graduation</td>
+					<td>
+						<select name="month" class="month withmin">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your anniversary</td>
+					<td>
+						<select name="month" class="month withmin">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<h2>Even smaller space for selectmenu</h2>
+		<p>
+			Selects have a width of 100% and are within sized containers. Selectmenu has it's width set
+			to the width of the select. Daylook ok because options fit in space. <strong>But popup
+			menus for month and year do not fit causing  the month names to be not visible.</strong>
+		</p>
+		<fieldset>
+			<table id="width4">
+				<col width="40%">
+				<col width="20%">
+				<col width="20%">
+				<col width="20%">
+				<tr>
+					<th>Event</th>
+					<th>Month</th>
+					<th>Day</th>
+					<th>Year</th>
+				</tr>
+				<tr>
+					<td>Your birthdate</td>
+					<td>
+						<select name="month" class="month">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your graduation</td>
+					<td>
+						<select name="month" class="month">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your anniversary</td>
+					<td>
+						<select name="month" class="month">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year">
+						</select>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<h2>FIXED: Even smaller space for selectmenu using minMenuWidth</h2>
+		<p>
+			Selects have a width of 100% and are within sized containers. Selectmenu has it's width set
+			to the width of the select and a minimum width set using minMenuWidth. All popup menu now
+			show content that fits space and doesn't have horizontal scrollbars. 
+		</p>
+		<fieldset>
+			<table id="width4">
+				<col width="40%">
+				<col width="20%">
+				<col width="20%">
+				<col width="20%">
+				<tr>
+					<th>Event</th>
+					<th>Month</th>
+					<th>Day</th>
+					<th>Year</th>
+				</tr>
+				<tr>
+					<td>Your birthdate</td>
+					<td>
+						<select name="month" class="month withmin">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day withmin">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year withmin">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your graduation</td>
+					<td>
+						<select name="month" class="month withmin">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day withmin">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year withmin">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your anniversary</td>
+					<td>
+						<select name="month" class="month withmin">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day withmin">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year withmin">
+						</select>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<h2>UNFIXED PROBLEM: Large space for selectmenu, no width set</h2>
+		<p>
+			Selects have a width of 100% and are within sized containers. <strong>Selectmenu DOES NOT have it's width set.
+			Notice that the popup menu is not fully visible and goes off the screen to the left.</strong> It appears there
+			is a problem with sizing the popup menu with this combination of container styles.
+		</p>
+		<fieldset>
+			<table>
+				<col width="40%">
+				<col width="20%">
+				<col width="20%">
+				<col width="20%">
+				<tr>
+					<th>Event</th>
+					<th>Month</th>
+					<th>Day</th>
+					<th>Year</th>
+				</tr>
+				<tr>
+					<td>Your birthdate</td>
+					<td>
+						<select name="month" class="month nosize">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day nosize">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year nosize">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your graduation</td>
+					<td>
+						<select name="month" class="month nosize">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day nosize">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year nosize">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Your anniversary</td>
+					<td>
+						<select name="month" class="month nosize">
+						</select>
+					</td>
+					<td>
+						<select name="day" class="day nosize">
+						</select>
+					</td>
+					<td>
+						<select name="year" class="year nosize">
+						</select>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</form>
+</body>
+</html>
